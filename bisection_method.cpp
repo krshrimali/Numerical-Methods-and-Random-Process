@@ -15,6 +15,10 @@ using namespace std;
 float function_value(float, int, int*);
 
 int main(int argc, char** argv) {
+    if(argc != 2) {
+        cerr << "Give proper arguments " << endl;
+        exit(1);
+    }
     // input the polynomial degrees
     int N; cin >> N; // maximum degree
     int* coefficients = new int; // array, and it's memory allocation
@@ -36,8 +40,8 @@ int main(int argc, char** argv) {
         }
     }
 
-    int max = 100;
-    int min = -100;
+    int max = 10;
+    int min = -10;
     int temp = N;
     float sum_final_positive = 2147483.0;
     float sum_final_negative = -2147483.0;
@@ -46,6 +50,10 @@ int main(int argc, char** argv) {
 
     while(min <= max) {
         float sum = function_value(min, temp, coefficients);
+        if(sum == 0){
+            cout << "Solution is: " << min << endl;
+            return -1;
+        }
         temp = N;
         // cout << "sum is : " << sum  << endl;
         if(sum > 0) {
@@ -57,8 +65,8 @@ int main(int argc, char** argv) {
         else if(sum < 0) {
             if(sum > sum_final_negative) 
                 sum_final_negative = sum;
-            else
-                sum_final_negative = sum_previous_negative;
+            // else
+            //     sum_final_negative = sum_previous_negative;
         }
         sum_previous_positive = sum;
         sum_previous_negative = sum;
@@ -72,6 +80,59 @@ int main(int argc, char** argv) {
     float a = sum_final_positive;
     float b = sum_final_negative;
 
+    float avg;
+    int count = 0;
+    float solution;
+    float flag_a = 0;
+    float flag_b = 0;
+    while(true) {
+        // cout << " a b " << a << b << endl;
+        // if(count > 1) {
+        //     if(flag_a == 1) {
+        //         avg = (a + b)/2.0;
+        //     }
+        //     else if(flag_b == 1) {
+        //         avg = (a + b)/2.0;
+        //     }
+        // }
+        // else {
+        //     avg = (a + b)/2.0;
+        // }
+        if(count == 0) avg = (a + b)/2.0;
+        // cout << x << endl;
+        float sum_new = function_value(avg, N, coefficients);
+        cout << avg << " " <<  sum_new << endl;
+        if(sum_new * function_value(a, N, coefficients) < 0) {
+            cout << "function_value(a, N, coefficients) " << function_value(a, N, coefficients) << endl;
+            // solution = x;
+            b = avg;
+            avg = (a + avg)/2.0;
+            flag_b = 1;
+            flag_a = 0;
+        }
+        else if(sum_new * function_value(b, N, coefficients) < 0) {
+            cout << "function_value(b, N, coefficients) " << function_value(b, N, coefficients) << endl;
+            // solution = x;
+            a = avg;
+            avg = (b + avg)/2.0;
+            flag_a = 1;
+            flag_b = 0;
+            // solution = x;
+            // b = x;
+        }
+        else if(sum_new == 0) {
+            // cout << "Solution is: " << x << endl;
+            return -1;
+        }
+        cout << "x is: " << avg << endl;
+        // cout << x << " a is: " << a << " b is: " << b << endl;
+        // cout << " " << function_value(x, N, coefficients) << endl;;
+        // cout.precision(atoi(argv[1]));
+        count += 1;
+        if(count == 20) {
+            break;
+        }
+    }
 }
 
 float function_value(float x, int N, int* coefficients){
