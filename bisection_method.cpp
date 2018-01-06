@@ -9,10 +9,12 @@ Contributors: (none as of now) [if any]
 #include <iostream>
 #include <cstdlib>
 #include <math.h>
+#include <iomanip>      // std::setprecision
 
 using namespace std;
 
-float function_value(float, int, int*);
+float function_value(float, int, int*); // to calculate value of the function at given value
+int compare(float x, float y, int precision); // to compare two float values with given precision
 
 int main(int argc, char** argv) {
     if(argc != 2) {
@@ -48,6 +50,7 @@ int main(int argc, char** argv) {
     float sum_previous_positive = 2147483.0;
     float sum_previous_negative = -2147483.0;
 
+    // finding a and b such that f(a) * f(b) < 0
     while(min <= max) {
         float sum = function_value(min, temp, coefficients);
         if(sum == 0){
@@ -73,8 +76,8 @@ int main(int argc, char** argv) {
         min++;
         // cout << sum_final_positive << endl;
     }
-    cout << "sum_final_positive " << sum_final_positive << endl;
-    cout << "sum_final_negative " << sum_final_negative << endl;
+    cout << "sum_final_positive " << sum_final_positive << endl; // a such that f(a) > 0
+    cout << "sum_final_negative " << sum_final_negative << endl; // b such that f(b) < 0
 
     // for simplicity
     float a = sum_final_positive;
@@ -85,25 +88,16 @@ int main(int argc, char** argv) {
     float solution;
     float flag_a = 0;
     float flag_b = 0;
+    float temp_new;
+    
+    // Bisection part
     while(true) {
-        // cout << " a b " << a << b << endl;
-        // if(count > 1) {
-        //     if(flag_a == 1) {
-        //         avg = (a + b)/2.0;
-        //     }
-        //     else if(flag_b == 1) {
-        //         avg = (a + b)/2.0;
-        //     }
-        // }
-        // else {
-        //     avg = (a + b)/2.0;
-        // }
         if(count == 0) avg = (a + b)/2.0;
         // cout << x << endl;
         float sum_new = function_value(avg, N, coefficients);
         cout << avg << " " <<  sum_new << endl;
         if(sum_new * function_value(a, N, coefficients) < 0) {
-            cout << "function_value(a, N, coefficients) " << function_value(a, N, coefficients) << endl;
+            // cout << "function_value(a, N, coefficients) " << function_value(a, N, coefficients) << endl;
             // solution = x;
             b = avg;
             avg = (a + avg)/2.0;
@@ -111,7 +105,7 @@ int main(int argc, char** argv) {
             flag_a = 0;
         }
         else if(sum_new * function_value(b, N, coefficients) < 0) {
-            cout << "function_value(b, N, coefficients) " << function_value(b, N, coefficients) << endl;
+            // cout << "function_value(b, N, coefficients) " << function_value(b, N, coefficients) << endl;
             // solution = x;
             a = avg;
             avg = (b + avg)/2.0;
@@ -120,19 +114,27 @@ int main(int argc, char** argv) {
             // solution = x;
             // b = x;
         }
-        else if(sum_new == 0) {
-            // cout << "Solution is: " << x << endl;
-            return -1;
-        }
-        cout << "x is: " << avg << endl;
-        // cout << x << " a is: " << a << " b is: " << b << endl;
-        // cout << " " << function_value(x, N, coefficients) << endl;;
-        // cout.precision(atoi(argv[1]));
+        
+        // cout << "x is: " << avg << endl;
+        temp_new = avg;
+        
         count += 1;
-        if(count == 20) {
-            break;
+        if(count == 10) {
+            if(compare(avg, temp_new, atoi(argv[1]))){
+                cout << "Solution is: ";
+                cout << setprecision(atoi(argv[1]) + 1) << temp_new << endl;
+                exit(1);
+            }
         }
-    }
+    }   
+}
+
+int compare(float x, float y, int precision = 3) {
+    cout << x * (pow(10, precision) * 1.0) << endl;
+    if(x * (pow(10, precision) * 1.0) == y * (pow(10, precision) * 1.0))
+        return 1;
+    else
+        return 0;
 }
 
 float function_value(float x, int N, int* coefficients){
