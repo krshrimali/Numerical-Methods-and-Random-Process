@@ -25,6 +25,8 @@ int main(int argc, char** argv) {
     int N; cin >> N; // maximum degree
     int* coefficients = new int; // array, and it's memory allocation
 
+    // Input coefficients
+    cout << "Input Coefficients: " << endl;
     for(int i = 0; i <= N; i++) {
         cin >> *(coefficients + i);
     }
@@ -32,6 +34,7 @@ int main(int argc, char** argv) {
     cout << endl;
 
     // Output equation
+    cout << "Polynomial is: " << endl;
     for(int i = N; i >= 0; i--) {
         cout << *(coefficients + i) << "*" << "x" << " " << i << " ";
         if(i != 0) {
@@ -42,8 +45,10 @@ int main(int argc, char** argv) {
         }
     }
 
+    // Change range of values, according to the equation
     int max = 10;
     int min = -10;
+
     int temp = N;
     float sum_final_positive = 2147483.0;
     float sum_final_negative = -2147483.0;
@@ -76,8 +81,8 @@ int main(int argc, char** argv) {
         min++;
         // cout << sum_final_positive << endl;
     }
-    cout << "sum_final_positive " << sum_final_positive << endl; // a such that f(a) > 0
-    cout << "sum_final_negative " << sum_final_negative << endl; // b such that f(b) < 0
+    // cout << "sum_final_positive " << sum_final_positive << endl; // a such that f(a) > 0
+    // cout << "sum_final_negative " << sum_final_negative << endl; // b such that f(b) < 0
 
     // for simplicity
     float a = sum_final_positive;
@@ -95,7 +100,7 @@ int main(int argc, char** argv) {
         if(count == 0) avg = (a + b)/2.0;
         // cout << x << endl;
         float sum_new = function_value(avg, N, coefficients);
-        cout << avg << " " <<  sum_new << endl;
+        // cout << avg << " " <<  sum_new << endl;
         if(sum_new * function_value(a, N, coefficients) < 0) {
             // cout << "function_value(a, N, coefficients) " << function_value(a, N, coefficients) << endl;
             // solution = x;
@@ -130,7 +135,7 @@ int main(int argc, char** argv) {
 }
 
 int compare(float x, float y, int precision = 3) {
-    cout << x * (pow(10, precision) * 1.0) << endl;
+    // cout << x * (pow(10, precision) * 1.0) << endl;
     if(x * (pow(10, precision) * 1.0) == y * (pow(10, precision) * 1.0))
         return 1;
     else
