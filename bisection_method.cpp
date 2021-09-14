@@ -1,8 +1,6 @@
 /* 
 Topic: Bisection method, to find roots of an algebraic polynomial equation.
-Course: Numerical Methods and Random Process
-Course taught by : Dr. Ramakrishnan Bandi
-Author: Kushashwa Ravi Shrimali [16100035]
+Author: Kushashwa Ravi Shrimali
 Contributors: (none as of now) [if any]
 */
 
